@@ -22,6 +22,6 @@ RUN gradle bootRepackage
 * Requires the use of an intermediate stage as `spring-boot-package-builder`
 * WAR must be executable
 
-```
+```dockerfile
 FROM marcellodesales/spring-boot-package-runner
 ```
