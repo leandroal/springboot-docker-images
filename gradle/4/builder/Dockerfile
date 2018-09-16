@@ -1,7 +1,7 @@
 # #####################################################################
-# Build stage for building the target directory before running tests
+# Build and pull dependencies
 # #####################################################################
-FROM gradle:4.10.1-jdk8 as builder
+FROM gradle:4.10.1-jdk8
 MAINTAINER marcello.desales@gmail.com
 USER root
 
@@ -28,4 +28,5 @@ ONBUILD RUN gradle downloadDependencies
 
 ONBUILD ADD ./src src/
 
+# Just a build and checks
 ONBUILD RUN gradle build -x war -x test
