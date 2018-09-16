@@ -5,7 +5,7 @@
 # 2. Build your steps needed
 # 3. For runtime image use FROM marcellodesales/spring-boot-package-runner
 #    - It will copy the generate WAR and resources properly
-#
+# * Look at background info https://spring.io/guides/gs/spring-boot-docker/
 # #####################################################################
 FROM openjdk:8-jre-slim
 MAINTAINER marcello.desales@gmail.com
@@ -19,11 +19,11 @@ WORKDIR /runtime
 
 # Copy from the previous stage
 ONBUILD RUN echo "Will copy from spring-boot-package-builder /app/build/libs/*.war /tmp"
-ONBUILD COPY --from=spring-boot-package-builder /app/build/libs/*.war /tmp
+ONBUILD COPY --from=marcellodesales/springboot-war-builder /app/build/libs/*.war /tmp
 ONBUILD RUN ls -la /tmp/*.war
 
 ONBUILD RUN echo "Will copy from /app/src/main/resources /runtime/resources"
-ONBUILD COPY --from=spring-boot-package-builder /app/src/main/resources /runtime/resources
+ONBUILD COPY --from=marcellodesales/springboot-war-builder /app/src/main/resources /runtime/resources
 ONBUILD RUN ls -la /runtime/resources
 
 # Just rename the built version
