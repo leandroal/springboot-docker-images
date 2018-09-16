@@ -12,7 +12,6 @@ FROM marcellodesales/springboot-builder as marcellodesales-springboot-builder
 # #####################################################################
 # Build stage for running the runtime image
 # #####################################################################
-FROM marcellodesales/springboot-executable-runner
+FROM marcellodesales/springboot-runner
 
 # The image depends on the built artifacts by the stage
-# built from "marcellodesales/springboot-war-builder"
