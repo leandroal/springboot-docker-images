@@ -19,11 +19,11 @@ WORKDIR /runtime
 
 # Copy from the previous stage
 ONBUILD RUN echo "Will copy from spring-boot-package-builder /app/build/libs/*.war /tmp"
-ONBUILD COPY --from=marcellodesales/springboot-war-builder /app/build/libs/*.war /tmp
+ONBUILD COPY --from=marcellodesales-springboot-war-builder /app/build/libs/*.war /tmp
 ONBUILD RUN ls -la /tmp/*.war
 
 ONBUILD RUN echo "Will copy from /app/src/main/resources /runtime/resources"
-ONBUILD COPY --from=marcellodesales/springboot-war-builder /app/src/main/resources /runtime/resources
+ONBUILD COPY --from=marcellodesales-springboot-war-builder /app/src/main/resources /runtime/resources
 ONBUILD RUN ls -la /runtime/resources
 
 # Just rename the built version
