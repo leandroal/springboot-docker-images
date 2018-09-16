@@ -6,6 +6,7 @@
 # 3. For runtime image use FROM marcellodesales/spring-boot-package-runner
 #    - It will copy the generate WAR and resources properly
 # * Look at background info https://spring.io/guides/gs/spring-boot-docker/
+# * https://github.com/moby/moby/issues/15025#issuecomment-371466934
 # #####################################################################
 FROM openjdk:8-jre-slim
 MAINTAINER marcello.desales@gmail.com
@@ -17,20 +18,23 @@ RUN update-ca-certificates && mkdir -p /usr/share/ssl/certs && \
 
 WORKDIR /runtime
 
+ONBUILD ARG EXECUTABLE_TASK_TYPE
+ONBUILD ENV EXECUTABLE_TASK_TYPE=${EXECUTABLE_TASK_TYPE}
+
 # Copy from the previous stage
-ONBUILD RUN echo "Will copy from spring-boot-package-builder /app/build/libs/*.war /tmp"
-ONBUILD COPY --from=marcellodesales-springboot-war-builder /app/build/libs/*.war /tmp
-ONBUILD RUN ls -la /tmp/*.war
+ONBUILD RUN echo "Will copy from spring-boot-package-builder /app/build/libs/*.${EXECUTABLE_TASK_TYPE} /tmp"
+ONBUILD COPY --from=marcellodesales-springboot-builder /app/build/libs/*.${EXECUTABLE_TASK_TYPE} /tmp
+ONBUILD RUN ls -la /tmp/*.${EXECUTABLE_TASK_TYPE}
 
 ONBUILD RUN echo "Will copy from /app/src/main/resources /runtime/resources"
-ONBUILD COPY --from=marcellodesales-springboot-war-builder /app/src/main/resources /runtime/resources
+ONBUILD COPY --from=marcellodesales-springboot-builder /app/src/main/resources /runtime/resources
 ONBUILD RUN ls -la /runtime/resources
 
 # Just rename the built version
-ONBUILD RUN echo "Renaming the war to the runtime dir"
-ONBUILD RUN find /tmp -name "*.war" ! -name "*sources*" ! -name "*javadoc*" -exec cp -t /runtime {} + && \
-   mv /runtime/*.war /runtime/server.jar && \
-   rm -f /tmp/*.war
+ONBUILD RUN echo "Renaming the executable ${EXECUTABLE_TASK_TYPE} to the runtime dir"
+ONBUILD RUN find /tmp -name "*.${EXECUTABLE_TASK_TYPE}" ! -name "*sources*" ! -name "*javadoc*" -exec cp -t /runtime {} + && \
+   mv /runtime/*.${EXECUTABLE_TASK_TYPE} /runtime/server.jar && \
+   rm -f /tmp/*.${EXECUTABLE_TASK_TYPE}
 
 # What to execute on docker run
 ENTRYPOINT sh -c "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom \

@@ -1,19 +1,21 @@
 # #####################################################################
 # Build and pull dependencies
 # #####################################################################
+# Build Arguments to be received from a build pipeline
+# Use --build-arg <varname>=<value> during docker build
+# https://github.com/moby/moby/issues/15025#issuecomment-371466934
+# #####################################################################
+
 FROM gradle:4.10.1-jdk8
 MAINTAINER marcello.desales@gmail.com
 USER root
 
-# Build Arguments to be received from a build pipeline
-# Use --build-arg <varname>=<value> during docker build
-ONBUILD ARG GIT_SHA=${GIT_SHA:-0000000}
-ONBUILD ARG GIT_BRANCH=${GIT_BRANCH:-develop}
-ONBUILD ARG BUILD_NUMBER=${BUILD_NUMBER:-0}
+ONBUILD ARG GIT_SHA
+ONBUILD ARG GIT_BRANCH
+ONBUILD ARG BUILD_NUMBER
+ONBUILD ARG GRADLE_BUILD_TASKS
 
-# * Github at https://github.intuit.com/services-config/config-service/commit/${GIT_SHA}
-# * Jenkins at https://build2.intuit.com/services-config/blue/organizations/jenkins/config-service/detail/${GIT_BRANCH/${BUILD_NUMBER}
-ONBUILD ENV BUILD_TAG sha:${GIT_SHA},build:${GIT_BRANCH}/${BUILD_NUMBER}
+ONBUILD ENV BUILD_TAG=sha:${GIT_SHA},build:${GIT_BRANCH}/${BUILD_NUMBER}
 ONBUILD ENV GIT_SHA=${GIT_SHA} GIT_BRANCH=${GIT_BRANCH}
 
 WORKDIR /app/
@@ -24,6 +26,7 @@ ONBUILD ADD ./src/build/gradle src/build/gradle
 
 # https://stackoverflow.com/questions/21814652/how-to-download-dependencies-in-gradle/44168582#44168582
 # Almost **all** dependencies, but helps separating a few before the source-code
+ONBUILD RUN echo "Will execute gradle downloadDependencies"
 ONBUILD RUN gradle downloadDependencies
 
 ONBUILD ADD ./src src/
@@ -31,4 +34,5 @@ ONBUILD ADD ./src src/
 ONBUILD ARG GRADLE_BUILD_TASKS=${GRADLE_BUILD_TASKS:-build}
 
 # Just a build and checks
+ONBUILD RUN echo "Will execute gradle ${GRADLE_BUILD_TASKS}"
 ONBUILD RUN gradle ${GRADLE_BUILD_TASKS}
