@@ -28,5 +28,7 @@ ONBUILD RUN gradle downloadDependencies
 
 ONBUILD ADD ./src src/
 
+ONBUILD ARG GRADLE_BUILD_TASKS=${GRADLE_BUILD_TASKS:-build}
+
 # Just a build and checks
-ONBUILD RUN gradle build -x war -x test
+ONBUILD RUN gradle ${GRADLE_BUILD_TASKS}
