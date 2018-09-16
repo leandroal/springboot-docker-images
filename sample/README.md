@@ -2,7 +2,7 @@
 
 ## BootRun
 
-* Uses `build.grdle`
+* Uses `build.gradle`
 * Run with `bootRun` default profile
 
 ```
