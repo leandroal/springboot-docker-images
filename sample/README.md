@@ -158,7 +158,9 @@ Successfully built 89923a61a08c
 Successfully tagged myapp:latest
 ```
 
-* Running in the `dev` profile and loading `application-dev.yml`
+* Running in the `dev` profile
+  * Loads the file `application-dev.yml`
+  * The logs will be showing `The following profiles are active: dev`
 
 ```
 $ docker run -ti -e SPRING_PROFILES_ACTIVE=dev -p 8080:8080 myapp
