@@ -60,43 +60,8 @@ Starting a Gradle Daemon (subsequent builds will be faster)
 
 Retrieving dependencies for annotationProcessor
 
-Retrieving dependencies for apiElements
-
-Retrieving dependencies for archives
-
-Retrieving dependencies for bootArchives
-
-Retrieving dependencies for compile
-
-Retrieving dependencies for compileClasspath
-
-Retrieving dependencies for compileOnly
-
-Retrieving dependencies for default
-
-Retrieving dependencies for implementation
-
-Retrieving dependencies for runtime
-
-Retrieving dependencies for runtimeClasspath
-
-Retrieving dependencies for runtimeElements
-
-Retrieving dependencies for runtimeOnly
-
-Retrieving dependencies for testAnnotationProcessor
-
-Retrieving dependencies for testCompile
-
-Retrieving dependencies for testCompileClasspath
-
-Retrieving dependencies for testCompileOnly
-
-Retrieving dependencies for testImplementation
-
-Retrieving dependencies for testRuntime
-
-Retrieving dependencies for testRuntimeClasspath
+..
+..
 
 Retrieving dependencies for testRuntimeOnly
 
@@ -195,6 +160,7 @@ Hello Docker World from My App: Environment for development%
 docker build -t myapp --build-arg GIT_SHA=$(git rev-parse HEAD) \
          --build-arg GIT_BRANCH=$(git rev-parse --abbrev-ref --symbolic HEAD) \
          --build-arg BUILD_NUMBER=1234 .
+```
 
 # Sample Features
 
@@ -271,63 +237,8 @@ Starting a Gradle Daemon (subsequent builds will be faster)
 
 Retrieving dependencies for annotationProcessor
 
-
-Retrieving dependencies for apiElements
-
-
-Retrieving dependencies for archives
-
-
-Retrieving dependencies for bootArchives
-
-
-Retrieving dependencies for compile
-
-
-Retrieving dependencies for compileClasspath
-
-
-Retrieving dependencies for compileOnly
-
-
-Retrieving dependencies for default
-
-
-Retrieving dependencies for implementation
-
-
-Retrieving dependencies for runtime
-
-
-Retrieving dependencies for runtimeClasspath
-
-
-Retrieving dependencies for runtimeElements
-
-
-Retrieving dependencies for runtimeOnly
-
-
-Retrieving dependencies for testAnnotationProcessor
-
-
-Retrieving dependencies for testCompile
-
-
-Retrieving dependencies for testCompileClasspath
-
-
-Retrieving dependencies for testCompileOnly
-
-
-Retrieving dependencies for testImplementation
-
-
-Retrieving dependencies for testRuntime
-
-
-Retrieving dependencies for testRuntimeClasspath
-
+...
+...
 
 Retrieving dependencies for testRuntimeOnly
 
@@ -443,7 +354,7 @@ $ docker run -ti -p 8080:8080 sample
 ```
 
 * Make the call to the server
-  * Note tha the TAG here is different because the Dockerfile overrides the BUILD_TAG value!
+  * Note tha the TAG here is different because the Dockerfile overrides the `BUILD_TAG` value!
 
 ```
 $ curl -i localhost:8080
