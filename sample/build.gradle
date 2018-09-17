@@ -1,3 +1,7 @@
+// Group and version (used by jar)
+group = 'hello'
+version = '0.1.0'
+
 buildscript {
     repositories {
         mavenCentral()
@@ -14,6 +18,7 @@ apply plugin: 'io.spring.dependency-management'
 
 apply from: 'src/gradle/dependencies-downloader.gradle'
 apply from: 'src/gradle/jar.gradle'
+apply from: 'src/gradle/processResources.gradle'
 
 repositories {
     mavenCentral()

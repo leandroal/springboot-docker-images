@@ -1,4 +1,4 @@
 bootJar {
-    baseName = rootProject.name
-    version =  '0.1.0'
+  baseName = rootProject.name
+  version = project.version
 }
