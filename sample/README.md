@@ -192,4 +192,29 @@ Hello Docker World from My App: Environment for development%
 docker build -t myapp --build-arg GIT_SHA=$(git rev-parse HEAD) \
          --build-arg GIT_BRANCH=$(git rev-parse --abbrev-ref --symbolic HEAD) \
          --build-arg BUILD_NUMBER=1234 .
+
+# Sample Features
+
+## Response Filter with Build Info
+
+* Build with build information while running
+
+```
+GIT_SHA=$(git rev-parse HEAD) \
+GIT_BRANCH=$(git rev-parse --abbrev-ref --symbolic HEAD) \
+BUILD_TAG=$USER \
+gradle clean bootRun
+```
+
+* HTTP Response Headers filters
+
+```
+$ curl -i localhost:8080
+HTTP/1.1 200
+X-App-Build-Info: commit=486223a73d435c778ac2ef93b68ee637652ee370;branch=feature/sample/show-build-info-all-response-headers;tag=mdesales;time=2018-09-17-05:32:07-UTC;version=0.1.0
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 47
+Date: Mon, 17 Sep 2018 05:32:12 GMT
+
+Hello Docker World from My App: Default profile%
 ```

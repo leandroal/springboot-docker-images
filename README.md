@@ -69,3 +69,5 @@ After this builds, you will have an executable image:
 docker build -t myapp .
 docker run -ti myapp
 ```
+
+Go to the Sample's directory for more details.
