@@ -11,30 +11,43 @@
 FROM openjdk:8-jre-slim
 MAINTAINER marcello.desales@gmail.com
 
-# This is to support HTTPS calls to other services
+# ca certificates: to support HTTPS calls to other services
 RUN apt-get update && apt-get install -y curl ca-certificates
 RUN update-ca-certificates && mkdir -p /usr/share/ssl/certs && \
     chmod 755 /usr/share/ssl/certs
 
+# libapr: to support Tomcat production http://tomcat.apache.org/native-doc/
+# https://stackoverflow.com/questions/4278047/apr-based-apache-tomcat-native-library-was-not-found-on-the-java-library-path
+# RUN apt-get install -y add-apt-repository
+# RUN add-apt-repository ppa:ondrej/apache2 && apt-get update && apt-get install -y libapr1.0-dev libssl-dev
+
 WORKDIR /runtime
 
-ONBUILD ARG EXECUTABLE_TASK_TYPE
-ONBUILD ENV EXECUTABLE_TASK_TYPE=${EXECUTABLE_TASK_TYPE}
+ONBUILD ARG RUNNER_EXTENSION
+ONBUILD ENV RUNNER_EXTENSION=${RUNNER_EXTENSION}
+
+ONBUILD ARG RUNNER_DIR
+ONBUILD ENV RUNNER_DIR=${RUNNER_DIR}
+
+ONBUILD ARG RUNNER_PORT
+ONBUILD ENV RUNNER_PORT=${RUNNER_PORT}
 
 # Copy from the previous stage
-ONBUILD RUN echo "Will copy from spring-boot-package-builder /app/build/libs/*.${EXECUTABLE_TASK_TYPE} /tmp"
-ONBUILD COPY --from=marcellodesales-springboot-builder /app/build/libs/*.${EXECUTABLE_TASK_TYPE} /tmp
-ONBUILD RUN ls -la /tmp/*.${EXECUTABLE_TASK_TYPE}
+ONBUILD RUN echo "Will copy from marcellodesales-springboot-builder /app/${RUNNER_DIR}/*.${RUNNER_EXTENSION} /tmp"
+ONBUILD COPY --from=marcellodesales-springboot-builder /app/${RUNNER_DIR}/ /tmp
+ONBUILD RUN ls -la /tmp/*.${RUNNER_EXTENSION}
 
 ONBUILD RUN echo "Will copy from /app/src/main/resources /runtime/resources"
 ONBUILD COPY --from=marcellodesales-springboot-builder /app/src/main/resources /runtime/resources
 ONBUILD RUN ls -la /runtime/resources
 
 # Just rename the built version
-ONBUILD RUN echo "Renaming the executable ${EXECUTABLE_TASK_TYPE} to the runtime dir"
-ONBUILD RUN find /tmp -name "*.${EXECUTABLE_TASK_TYPE}" ! -name "*sources*" ! -name "*javadoc*" -exec cp -t /runtime {} + && \
-   mv /runtime/*.${EXECUTABLE_TASK_TYPE} /runtime/server.jar && \
-   rm -f /tmp/*.${EXECUTABLE_TASK_TYPE}
+ONBUILD RUN echo "Renaming the executable ${RUNNER_EXTENSION} to the runtime dir"
+ONBUILD RUN find /tmp -name "*.${RUNNER_EXTENSION}" ! -name "*sources*" ! -name "*javadoc*" -exec cp -t /runtime {} + && \
+   mv /runtime/*.${RUNNER_EXTENSION} /runtime/server.jar && \
+   rm -rf /tmp/*
+
+ONBUILD EXPOSE ${RUNNER_PORT}
 
 # What to execute on docker run
 ENTRYPOINT sh -c "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom \
