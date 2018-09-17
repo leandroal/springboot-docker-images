@@ -1,0 +1,29 @@
+// https://dzone.com/articles/resource-filtering-gradle
+import org.apache.tools.ant.filters.*
+
+// Expose the commit and branch values for the resources below
+ext {
+  commit = System.env.GIT_SHA ?: "--env-var-GIT_SHA-not-provided--"
+  branch = System.env.GIT_BRANCH ?: "--env-var-GIT_BRANCH-not-provided--"
+  tag = System.env.BUILD_TAG ?: "--env-var-BUILD_TAG-not-provided--"
+  time = new Date().format("yyyy-MM-dd-HH:mm:ss-z", TimeZone.getTimeZone('UTC'))
+  version = project.version
+}
+
+processResources {
+  filter ReplaceTokens, tokens: [
+    "build.commit": commit,
+    "build.branch": branch,
+    "build.tag": tag,
+    "build.time": time,
+    "build.version": version
+  ]
+}
+
+// Process resources when compiling
+compileJava.dependsOn(processResources) // added for spring-boot-configuration-processor
+
+// Include the processResources when running "gradle bootRun"
+bootJar {
+  launchScript()
+}
