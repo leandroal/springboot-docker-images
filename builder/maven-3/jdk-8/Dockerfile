@@ -6,7 +6,7 @@
 # https://github.com/moby/moby/issues/15025#issuecomment-371466934
 # #####################################################################
 
-FROM maven:3.2.5-jdk-8
+FROM maven:3.5.4-jdk-8
 MAINTAINER marcello.desales@gmail.com
 USER root
 
