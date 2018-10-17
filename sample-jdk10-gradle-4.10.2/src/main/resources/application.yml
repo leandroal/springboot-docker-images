@@ -1,0 +1,10 @@
+app:
+  name: My App
+  description: Default profile
+
+build:
+  version: "@build.version@"
+  commit: "@build.commit@"
+  branch: "@build.branch@"
+  tag: "@build.tag@"
+  time: "@build.time@"
